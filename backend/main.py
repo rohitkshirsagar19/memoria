@@ -10,9 +10,9 @@ print("Starting server setup...")
 
 # --- 1. Initialize Models and Database ---
 
-# FINAL CHANGE: Use a proven, lightweight model from the official sentence-transformers repo.
-print("Loading lightweight sentence transformer model (paraphrase-MiniLM-L3-v2)...")
-model = SentenceTransformer('sentence-transformers/paraphrase-MiniLM-L3-v2')
+# FINAL CHANGE: Using the ultra-lightweight ALBERT model for low-memory environments.
+print("Loading memory-efficient ALBERT model (paraphrase-albert-small-v2)...")
+model = SentenceTransformer('sentence-transformers/paraphrase-albert-small-v2')
 print("Model loaded.")
 
 print("Initializing ChromaDB...")
@@ -31,7 +31,7 @@ class SearchQuery(BaseModel):
 app = FastAPI(
     title="Memoria API",
     description="API for storing and retrieving memories for LLMs.",
-    version="0.4.0", # Final deployed version
+    version="1.0.0", # Let's call this version 1.0!
 )
 origins = ["chrome-extension://*"]
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
