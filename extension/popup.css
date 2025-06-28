@@ -92,3 +92,11 @@ h1 {
     padding: 20px;
     color: #61afef;
 }
+
+
+
+.result-item:hover {
+    cursor: pointer;
+    background-color: #3e4451; /* Lighter background on hover */
+    border-color: #61afef;      /* Highlight border on hover */
+}
