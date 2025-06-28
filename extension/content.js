@@ -1,51 +1,73 @@
 /**
- * Memoria - Content Script (v10 - Grok Final)
+ * Memoria - Content Script (v12 - Correct Multi-Site Implementation)
  *
- * This script targets grok.com. It uses a reliable polling method
- * to find AI message containers and injects the "Save" button into the action bar.
+ * This version corrects previous errors and uses robust, two-step selectors
+ * for both Grok and Google AI Studio, powered by the reliable polling method.
  */
 
-console.log("%cMemoria Content Script Loaded (v10 - Grok).", "color: #4B0082; font-weight: bold;");
+console.log("%cMemoria Content Script Loaded (v12 - Final Multi-Site).", "color: #1DB954; font-weight: bold;");
 
-// --- Configuration for grok.com ---
-const SITE_CONFIG = {
+// --- Configuration for All Supported Sites ---
+const SITE_CONFIGS = {
+  
+  // --- Grok Configuration ---
   "grok.com": {
-    // This selector finds the container for an AI response turn.
-    // The `items-start` class differentiates it from the user's `items-end` turn.
-    turnContainerSelector: 'div.group.flex-col.items-start',
-
-    // This selector finds the AI-generated text content within the turn.
+    // A general container for any message turn.
+    turnContainerSelector: 'div.group.flex-col', 
+    // A specific selector inside the turn that ONLY exists for AI messages.
+    assistantMessageIdentifier: 'div.response-content-markdown',
+    // Where to grab the text from.
     messageContentSelector: 'div.response-content-markdown',
-
-    // This selector finds the container for the action buttons (Copy, Like, Dislike).
-    buttonGroupSelector: 'div.action-buttons'
+    // Where to inject the button.
+    buttonGroupSelector: 'div.action-buttons',
+    buttonStyle: {
+        backgroundColor: "#5E5CE6", // Grok-like purple
+        color: "white",
+        padding: "4px 12px",
+        fontSize: "14px",
+    }
+  },
+  
+  // --- Google AI Studio Configuration ---
+  "aistudio.google.com": {
+    // A general container for any message turn.
+    turnContainerSelector: 'ms-chat-turn',
+    // A specific selector inside the turn that ONLY exists for AI messages.
+    assistantMessageIdentifier: '[data-turn-role="Model"]',
+    // Where to grab the text from.
+    messageContentSelector: 'ms-cmark-node',
+    // Where to inject the button.
+    buttonGroupSelector: 'div.turn-footer',
+    buttonStyle: {
+        backgroundColor: "#1a73e8", // Google Blue
+        color: "white",
+        padding: "8px 12px",
+        fontSize: "13px",
+    }
   }
 };
-const currentConfig = SITE_CONFIG[window.location.hostname];
+
+const currentConfig = SITE_CONFIGS[window.location.hostname];
 
 // --- Core Functions ---
 
-function createSaveButton() {
-  const button = document.createElement("button");
-  // Using a class for styling is better practice. We'll add a CSS file later.
-  // For now, let's keep it simple with inline styles for quick prototyping.
-  button.innerHTML = "💾 Save to Memory";
-  button.title = "Save this response to Memoria";
-  button.style.backgroundColor = "#5E5CE6"; // Grok-like purple
-  button.style.color = "white";
-  button.style.border = "1px solid rgba(255, 255, 255, 0.2)";
-  button.style.borderRadius = "9999px"; // Pill shape
-  button.style.padding = "4px 12px";
-  button.style.fontSize = "14px";
-  button.style.fontWeight = "500";
-  button.style.marginLeft = "8px"; // Add some space from other buttons
-  button.style.cursor = "pointer";
-  button.style.transition = "background-color 0.2s";
+function createSaveButton(style) {
+    const button = document.createElement("button");
+    button.innerHTML = "💾 Save Memory";
+    button.title = "Save this response to Memoria";
+    
+    // Apply styles from config
+    Object.assign(button.style, {
+        border: "none",
+        borderRadius: "8px",
+        fontWeight: "500",
+        marginLeft: "8px",
+        cursor: "pointer",
+        transition: "background-color 0.2s",
+        ...style // Site-specific styles
+    });
 
-  button.onmouseover = () => button.style.backgroundColor = "#4c4ad8";
-  button.onmouseout = () => button.style.backgroundColor = "#5E5CE6";
-
-  return button;
+    return button;
 }
 
 function processPage() {
@@ -57,13 +79,24 @@ function processPage() {
     if (turnElement.dataset.memoriaProcessed === "true") {
       continue;
     }
+
+    // Check if this turn is an AI message by looking for the identifier.
+    const isAssistantTurn = turnElement.querySelector(currentConfig.assistantMessageIdentifier);
+    
+    if (!isAssistantTurn) {
+        // Mark non-AI turns so we don't check them again.
+        turnElement.dataset.memoriaProcessed = "true";
+        continue;
+    }
+
+    // This is an AI turn, so we mark it and proceed.
     turnElement.dataset.memoriaProcessed = "true";
-    console.log("[Memoria] Found new AI message turn:", turnElement);
+    console.log(`[Memoria] Found new AI message turn on ${window.location.hostname}:`, turnElement);
 
     const buttonGroup = turnElement.querySelector(currentConfig.buttonGroupSelector);
     if (buttonGroup) {
       console.log("%c[Memoria] Found action buttons, injecting...", "color: green;");
-      const saveButton = createSaveButton();
+      const saveButton = createSaveButton(currentConfig.buttonStyle);
 
       saveButton.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -74,15 +107,12 @@ function processPage() {
           
           chrome.runtime.sendMessage({ type: "SAVE_MEMORY", payload: { content: messageText } });
 
-          saveButton.textContent = "✅ Saved!";
+          saveButton.innerHTML = "✅ Saved!";
           saveButton.disabled = true;
-          saveButton.style.backgroundColor = "#00A86B"; // Green on success
+          saveButton.style.backgroundColor = "#00A86B";
           saveButton.style.cursor = "default";
-          saveButton.onmouseover = null;
-          saveButton.onmouseout = null;
         }
       });
-      // Add our button to the start of the button group
       buttonGroup.prepend(saveButton);
     }
   }
@@ -90,6 +120,6 @@ function processPage() {
 
 // --- Main Execution ---
 if (currentConfig) {
-    console.log("[Memoria] Polling started for grok.com.");
-    setInterval(processPage, 1000); // Check for new messages every second
+    console.log(`[Memoria] Polling started for ${window.location.hostname}.`);
+    setInterval(processPage, 1000);
 }

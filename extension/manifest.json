@@ -9,7 +9,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://grok.com/*"
+        "https://grok.com/*",
+        "https://aistudio.google.com/*"
       ],
       "js": ["content.js"]
     }
