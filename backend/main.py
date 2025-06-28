@@ -12,7 +12,8 @@ print("Starting server setup...")
 
 print("Loading sentence transformer model...")
 #model = SentenceTransformer('all-MiniLM-L6-v2')
-model = SentenceTransformer('Xenova/all-MiniLM-L6-v2')
+#model = SentenceTransformer('Xenova/all-MiniLM-L6-v2')
+model = SentenceTransformer('sentence-transformers/paraphrase-MiniLM-L3-v2')
 print("Model loaded.")
 
 print("Initializing ChromaDB...")
