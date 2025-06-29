@@ -30,7 +30,7 @@ Later, when you start a new conversation, you can instantly search your memories
     *   Grok (`grok.com`)
     *   Google AI Studio (`aistudio.google.com`)
 
-## 🛠 Tech Stack
+## Tech Stack
 
 The project is a full-stack application composed of a browser extension front-end and a Python backend.
 
@@ -49,15 +49,18 @@ The project is a full-stack application composed of a browser extension front-en
 *   **Docker:** For containerizing the application for reliable deployment.
 
 ##  Architecture
-
 Memoria uses a standard client-server architecture:
+<p align="center">
+  <img src="images/arch.png" alt="Description" width="300"/>
+</p>
+
 
 1.  The **Chrome Extension** (Client) runs in the user's browser, injecting UI elements and capturing user actions.
 2.  The **FastAPI Server** (Backend), deployed on Hugging Face Spaces, handles all the heavy lifting.
 3.  The **Pinecone Database** acts as our permanent, intelligent memory store.
 
 
-## 🚀 Getting Started
+##  Setup
 
 ### Installation (for End Users)
 
