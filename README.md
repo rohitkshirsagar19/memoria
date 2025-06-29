@@ -14,11 +14,16 @@ A browser extension that gives any LLM a persistent, long-term memory, solving t
 
 Large Language Models (LLMs) like ChatGPT, Grok, and Claude are incredibly powerful, but they have one major limitation: they are **stateless**. Every new chat session starts from a blank slate. You constantly have to re-explain project details, personal preferences, and past conversations, which is inefficient and frustrating.
 
-### Our Solution
+### Solution
 
 **Memoria** acts as an intelligent memory layer that works alongside any LLM. It allows you to explicitly save important pieces of information from a conversation to a permanent, AI-powered database.
 
 Later, when you start a new conversation, you can instantly search your memories using natural language and inject the relevant context directly into your prompt.
+
+<p align="center">
+  <img src="images/popup.png" alt="Description" width="300" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+
 
 ## Features
 
