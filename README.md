@@ -114,7 +114,7 @@ cd memoria-project
 *   Select the `memoria-project/extension` folder from your local files.
 *   The Memoria extension will now be installed and ready for local testing. It will be configured to communicate with your local backend server.
 
-## 🛣️ Roadmap & Future Work
+## Roadmap & Future Work
 
 *   [ ] **Support More LLMs:** Add configurations for Claude, Perplexity, and others.
 *   [ ] **Memory Management UI:** Create a dedicated page where users can view, edit, and delete their saved memories.
@@ -122,6 +122,6 @@ cd memoria-project
 *   [ ] **Categorization:** Allow users to tag or categorize memories for better organization.
 *   [ ] **Publish to Firefox:** Port the extension to the Firefox Add-on Store.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
