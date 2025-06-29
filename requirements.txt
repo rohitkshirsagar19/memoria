@@ -62,3 +62,8 @@ urllib3
 uvloop
 watchfiles
 websockets
+
+
+
+# Database
+pinecone-client[grpc]

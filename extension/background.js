@@ -1,6 +1,6 @@
 console.log("Memoria Background Script Loaded (v3).");
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://rohitkshirsagar19-memoria-api.hf.space";
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "SAVE_MEMORY") {

@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         console.log("Paste successful.");
                                     }
                                 });
+                    
                                 // Close the popup after clicking
                                 window.close(); 
                             }

@@ -19,7 +19,8 @@
     "storage"
   ],
   "host_permissions": [
-    "http://127.0.0.1:8000/*"
+    "http://127.0.0.1:8000/*",
+    "https://rohitkshirsagar19-memoria-api.hf.space"
   ],
   "action": {
     "default_title": "Memoria Search",
